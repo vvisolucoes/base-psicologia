@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Anamnese — Vanessa Recucci</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#1a7a6e;--teal-light:#2aa898;--teal-pale:#e8f5f3;--dark:#1c1c1c;--mid:#555;--light:#f7f5f2;--white:#fff;--accent:#c9a96e;--danger:#c0392b;--radius:14px;--shadow:0 8px 40px rgba(26,122,110,.10)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px}
+  .header{text-align:center;margin-bottom:48px;animation:fadeDown .7s ease both}
+  .header .psi-icon{font-size:2.8rem;color:var(--teal);line-height:1;margin-bottom:10px}
+  .header h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--teal);letter-spacing:.02em}
+  .header p{font-size:.85rem;color:var(--mid);margin-top:4px;font-weight:300;letter-spacing:.04em;text-transform:uppercase}
+  .progress-wrap{width:100%;max-width:640px;margin-bottom:32px;opacity:0;animation:fadeDown .7s .1s ease forwards}
+  .progress-meta{display:flex;justify-content:space-between;font-size:.78rem;color:var(--mid);margin-bottom:8px}
+  .progress-bar{height:4px;background:#dde9e8;border-radius:99px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-light));border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .card{width:100%;max-width:640px;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:40px 44px;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--accent))}
+  .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);background:var(--teal-pale);padding:4px 12px;border-radius:99px;margin-bottom:20px}
+  .question-label{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;line-height:1.4;color:var(--dark);margin-bottom:8px}
+  .question-hint{font-size:.82rem;color:var(--mid);margin-bottom:28px;font-style:italic}
+  input[type=text],input[type=email],input[type=tel],input[type=number],textarea{width:100%;padding:13px 16px;border:1.5px solid #dde5e4;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--dark);background:#fafafa;outline:none;transition:border .2s,box-shadow .2s,background .2s;resize:vertical}
+  input:focus,textarea:focus{border-color:var(--teal);background:var(--white);box-shadow:0 0 0 3px rgba(26,122,110,.12)}
+  textarea{min-height:100px}
+  .options-grid{display:grid;gap:10px;margin-top:4px}
+  .option-btn{display:flex;align-items:center;gap:12px;padding:13px 18px;border:1.5px solid #dde5e4;border-radius:10px;cursor:pointer;transition:border .2s,background .2s,transform .15s;background:#fafafa;font-size:.9rem;color:var(--dark);user-select:none}
+  .option-btn:hover{border-color:var(--teal-light);background:var(--teal-pale);transform:translateX(3px)}
+  .option-btn.selected{border-color:var(--teal);background:var(--teal-pale);font-weight:500}
+  .radio-dot{width:18px;height:18px;border:2px solid #ccc;border-radius:50%;flex-shrink:0;display:grid;place-items:center;transition:border .2s}
+  .option-btn.selected .radio-dot{border-color:var(--teal)}
+  .option-btn.selected .radio-dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--teal)}
+  .check-box{width:18px;height:18px;border:2px solid #ccc;border-radius:5px;flex-shrink:0;display:grid;place-items:center;transition:border .2s,background .2s}
+  .checkbox-option.selected .check-box{border-color:var(--teal);background:var(--teal)}
+  .checkbox-option.selected .check-box::after{content:'✓';color:white;font-size:.7rem;font-weight:700}
+  .scale-wrap{margin-top:8px}
+  .scale-labels{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mid);margin-bottom:10px}
+  .scale-dots{display:flex;gap:6px;justify-content:space-between}
+  .scale-dot{flex:1;height:42px;border:1.5px solid #dde5e4;border-radius:8px;display:grid;place-items:center;cursor:pointer;font-size:.82rem;color:var(--mid);transition:all .2s;background:#fafafa}
+  .scale-dot:hover{border-color:var(--teal-light);color:var(--teal)}
+  .scale-dot.selected{border-color:var(--teal);background:var(--teal);color:white;font-weight:600}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:36px;gap:12px}
+  .btn{padding:13px 28px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;border:none;transition:all .2s}
+  .btn-primary{background:var(--teal);color:white;box-shadow:0 4px 18px rgba(26,122,110,.25)}
+  .btn-primary:hover{background:#155f55;transform:translateY(-1px)}
+  .btn-primary:disabled{opacity:.5;pointer-events:none}
+  .btn-secondary{background:transparent;color:var(--mid);border:1.5px solid #dde5e4}
+  .btn-secondary:hover{border-color:var(--teal-light);color:var(--teal)}
+  .btn-secondary:disabled{opacity:.4;pointer-events:none}
+  .error-msg{font-size:.8rem;color:var(--danger);margin-top:8px;display:none}
+  .error-msg.visible{display:block}
+  .done-screen{text-align:center;padding:20px 0}
+  .done-screen .big-icon{font-size:3.5rem;margin-bottom:16px}
+  .done-screen h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--teal);margin-bottom:10px}
+  .done-screen p{color:var(--mid);font-size:.92rem;line-height:1.7;max-width:420px;margin:0 auto}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .slide-out-left{animation:slideOutLeft .28s ease forwards}
+  .slide-in-right{animation:slideInRight .32s ease forwards}
+  .slide-out-right{animation:slideOutRight .28s ease forwards}
+  .slide-in-left{animation:slideInLeft .32s ease forwards}
+  @keyframes slideOutLeft{to{opacity:0;transform:translateX(-40px)}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes slideOutRight{to{opacity:0;transform:translateX(40px)}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+  @media(max-width:600px){.card{padding:28px 22px}.scale-dots{gap:3px}.scale-dot{font-size:.72rem}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="psi-icon">Ψ</div>
+  <h1>Ficha de Anamnese</h1>
+  <p>Psicóloga Vanessa Rodrigues Alves Recucci · CRP 06/151349</p>
+</header>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-meta">
+    <span id="progressLabel">Iniciando…</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<div class="card" id="quizCard"></div>
+
+<script>
+// ── ENDPOINT ─────────────────────────────────────────────────
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzPmTdi8OVBzKlSe9g_A10KvAM8cFgJzjChJlpLCwQEmyRVU8BC1XsMzXkvW68X-r5O3w/exec';
+
+// ── PERGUNTAS ─────────────────────────────────────────────────
+const SECTIONS = [
+  { id:'pessoais', label:'👤 Dados Pessoais', questions:[
+    { id:'nome',            type:'text',     label:'Nome completo',                   required:true },
+    { id:'idade',           type:'number',   label:'Idade',                           required:true,  hint:'Apenas números', min:1, max:120 },
+    { id:'sexo',            type:'radio',    label:'Sexo',                            required:true,
+      options:['Masculino','Feminino','Não-binário','Prefiro não informar'] },
+    { id:'estado_civil',    type:'radio',    label:'Estado civil',                    required:true,
+      options:['Solteiro(a)','Casado(a)','União estável','Divorciado(a)','Viúvo(a)'] },
+    { id:'escolaridade',    type:'radio',    label:'Escolaridade',                    required:true,
+      options:['Ensino fundamental','Ensino médio','Superior incompleto','Superior completo','Pós-graduação'] },
+    { id:'ocupacao',        type:'text',     label:'Ocupação',                        required:false },
+    { id:'reside_com',      type:'text',     label:'Reside com',                      required:false, hint:'Ex: sozinho(a), família, cônjuge…' },
+    { id:'telefone',        type:'tel',      label:'Telefone / WhatsApp',             required:true },
+    { id:'email',           type:'email',    label:'E-mail',                          required:false },
+  ]},
+  { id:'familiares', label:'👨‍👩‍👧 Dados Familiares', questions:[
+    { id:'pai_nome',        type:'text',     label:'Nome do pai',                     required:false },
+    { id:'pai_idade',       type:'number',   label:'Idade do pai',                    required:false, min:1, max:120 },
+    { id:'pai_ocup',        type:'text',     label:'Ocupação do pai',                 required:false },
+    { id:'mae_nome',        type:'text',     label:'Nome da mãe',                     required:false },
+    { id:'mae_idade',       type:'number',   label:'Idade da mãe',                    required:false, min:1, max:120 },
+    { id:'mae_ocup',        type:'text',     label:'Ocupação da mãe',                 required:false },
+    { id:'conjuge',         type:'text',     label:'Nome do cônjuge / parceiro(a)',   required:false },
+    { id:'conjuge_ocup',    type:'text',     label:'Ocupação do cônjuge',             required:false },
+    { id:'filhos',          type:'text',     label:'Filhos (nomes e idades)',         required:false, hint:'Ex: João 10 anos, Maria 7 anos' },
+  ]},
+  { id:'queixa', label:'💬 Queixa Principal', questions:[
+    { id:'queixa',          type:'textarea', label:'O que te traz à terapia?',        required:true,  hint:'Descreva com suas próprias palavras o motivo da consulta.' },
+    { id:'inicio',          type:'radio',    label:'O início dos sintomas foi:',      required:true,
+      options:['Súbito (aconteceu de repente)','Progressivo (foi piorando aos poucos)'] },
+    { id:'estressores',     type:'radio',    label:'Ocorreram eventos estressantes recentemente?', required:true,
+      options:['Sim','Não'] },
+    { id:'estressores_desc',type:'textarea', label:'Se sim, quais eventos?',          required:false, condition:{ id:'estressores', value:'Sim' } },
+    { id:'sintomas',        type:'checkbox', label:'Sintomas que está experienciando:', required:false,
+      options:['Ansiedade / preocupação excessiva','Tristeza / choro frequente','Insônia ou alterações no sono',
+               'Irritabilidade','Dificuldade de concentração','Fadiga / cansaço','Pensamentos acelerados',
+               'Isolamento social','Crises de pânico','Pensamentos de automutilação','Pensamentos suicidas','Outros'] },
+    { id:'intensidade',     type:'scale',    label:'Intensidade do que está sentindo:', required:true,
+      hint:'1 = muito leve · 10 = extremamente intenso', min:1, max:10 },
+  ]},
+  { id:'historia', label:'🕐 História Pregressa', questions:[
+    { id:'infancia',        type:'textarea', label:'Acontecimento marcante na infância ou adolescência?',
+      hint:'Separações, acidentes, doenças graves, perdas, traumas…',               required:false },
+    { id:'rel_familiar',    type:'radio',    label:'Como classificaria seu relacionamento com os familiares?', required:true,
+      options:['Muito bom','Bom','Regular','Difícil','Muito difícil'] },
+    { id:'obs_historia',    type:'textarea', label:'Outras observações sobre sua história de vida', required:false },
+  ]},
+  { id:'medico', label:'🏥 Histórico Médico', questions:[
+    { id:'trat_anterior',   type:'radio',    label:'Já fez tratamento psicológico ou psiquiátrico antes?', required:true,
+      options:['Sim','Não'] },
+    { id:'trat_desc',       type:'textarea', label:'Quando e por qual motivo?',       required:false, condition:{ id:'trat_anterior', value:'Sim' } },
+    { id:'doenca',          type:'radio',    label:'Possui alguma doença diagnosticada?', required:true,
+      options:['Sim','Não'] },
+    { id:'doenca_desc',     type:'text',     label:'Qual doença?',                    required:false, condition:{ id:'doenca', value:'Sim' } },
+    { id:'medicamento',     type:'radio',    label:'Faz uso de medicamento?',         required:true,  options:['Sim','Não'] },
+    { id:'medicamento_desc',type:'text',     label:'Qual(is) medicamento(s)?',        required:false, condition:{ id:'medicamento', value:'Sim' } },
+    { id:'hist_mental',     type:'radio',    label:'Familiar com histórico de doença mental?', required:true,
+      options:['Sim','Não','Não sei'] },
+    { id:'hist_alcool',     type:'radio',    label:'Familiar com histórico de abuso de álcool ou substância?', required:true,
+      options:['Sim','Não','Não sei'] },
+    { id:'hist_suicidio',   type:'radio',    label:'Histórico de suicídio ou tentativa na família?', required:true,
+      options:['Sim','Não','Prefiro não informar'] },
+    { id:'obs_medico',      type:'textarea', label:'Outras observações médicas relevantes', required:false },
+  ]},
+];
+
+// ── ESTADO ────────────────────────────────────────────────────
+const flat = [];
+SECTIONS.forEach(s => s.questions.forEach(q => flat.push({ ...q, sectionLabel:s.label, sectionId:s.id })));
+
+let flatIdx = 0;
+const answers = {};
+
+function isVisible(q) { return !q.condition || answers[q.condition.id] === q.condition.value; }
+function visFlat()    { return flat.filter(isVisible); }
+function currentQ()   { return visFlat()[flatIdx]; }
+
+const card  = document.getElementById('quizCard');
+const pFill = document.getElementById('progressFill');
+const pLabel= document.getElementById('progressLabel');
+const pPct  = document.getElementById('progressPct');
+
+// ── PROGRESSO ─────────────────────────────────────────────────
+function updateProgress() {
+  const vis = visFlat(), total = vis.length;
+  const pct = total ? Math.round(flatIdx / total * 100) : 0;
+  pFill.style.width = pct + '%';
+  pPct.textContent  = pct + '%';
+  const q = vis[flatIdx];
+  if (q) pLabel.textContent = q.sectionLabel;
+}
+
+// ── RENDERIZAR PERGUNTA ───────────────────────────────────────
+function renderQuestion(dir = 'forward') {
+  const q = currentQ();
+  if (!q) { submitForm(); return; }
+  const animOut = dir === 'forward' ? 'slide-out-left'  : 'slide-out-right';
+  const animIn  = dir === 'forward' ? 'slide-in-right'  : 'slide-in-left';
+  card.classList.add(animOut);
+  setTimeout(() => {
+    card.innerHTML = buildHTML(q);
+    card.className = 'card ' + animIn;
+    attachEvents(q);
+    updateProgress();
+  }, 280);
+}
+
+function buildHTML(q) {
+  const val = answers[q.id];
+  let inp = '';
+
+  if (['text','email','tel'].includes(q.type))
+    inp = `<input type="${q.type}" id="ans" value="${val||''}" autocomplete="off">`;
+  else if (q.type === 'number')
+    inp = `<input type="number" id="ans" value="${val||''}" min="${q.min||0}" max="${q.max||999}">`;
+  else if (q.type === 'textarea')
+    inp = `<textarea id="ans">${val||''}</textarea>`;
+  else if (q.type === 'radio')
+    inp = `<div class="options-grid">`+
+      q.options.map(o=>`<div class="option-btn${val===o?' selected':''}" data-val="${o}"><div class="radio-dot"></div><span>${o}</span></div>`).join('')+`</div>`;
+  else if (q.type === 'checkbox') {
+    const sel = val || [];
+    inp = `<div class="options-grid">`+
+      q.options.map(o=>`<div class="option-btn checkbox-option${sel.includes(o)?' selected':''}" data-val="${o}"><div class="check-box"></div><span>${o}</span></div>`).join('')+`</div>`;
+  }
+  else if (q.type === 'scale') {
+    const dots = Array.from({length:q.max-q.min+1},(_,i)=>i+q.min)
+      .map(n=>`<div class="scale-dot${val===n?' selected':''}" data-val="${n}">${n}</div>`).join('');
+    inp = `<div class="scale-wrap"><div class="scale-labels"><span>Muito leve</span><span>Muito intenso</span></div><div class="scale-dots">${dots}</div></div>`;
+  }
+
+  const isFirst = flatIdx === 0;
+  const isLast  = flatIdx >= visFlat().length - 1;
+
+  return `
+    <div class="section-tag">${q.sectionLabel}</div>
+    <div class="question-label">${q.label}${q.required?' <span style="color:var(--teal-light)">*</span>':''}</div>
+    ${q.hint?`<div class="question-hint">${q.hint}</div>`:''}
+    ${inp}
+    <div class="error-msg" id="errMsg">Por favor, preencha este campo.</div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" id="btnBack"${isFirst?' disabled':''}>← Voltar</button>
+      <button class="btn btn-primary"   id="btnNext">${isLast?'Enviar Ficha ✓':'Próximo →'}</button>
+    </div>`;
+}
+
+// ── EVENTOS ───────────────────────────────────────────────────
+function attachEvents(q) {
+  if (q.type==='radio')
+    card.querySelectorAll('.option-btn').forEach(b=>{
+      b.addEventListener('click',()=>{
+        card.querySelectorAll('.option-btn').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected'); answers[q.id]=b.dataset.val; hideErr();
+      });
+    });
+  if (q.type==='checkbox')
+    card.querySelectorAll('.option-btn').forEach(b=>{
+      b.addEventListener('click',()=>{
+        b.classList.toggle('selected');
+        answers[q.id]=[...card.querySelectorAll('.option-btn.selected')].map(x=>x.dataset.val);
+      });
+    });
+  if (q.type==='scale')
+    card.querySelectorAll('.scale-dot').forEach(d=>{
+      d.addEventListener('click',()=>{
+        card.querySelectorAll('.scale-dot').forEach(x=>x.classList.remove('selected'));
+        d.classList.add('selected'); answers[q.id]=parseInt(d.dataset.val); hideErr();
+      });
+    });
+  document.getElementById('btnNext').addEventListener('click',()=>goNext(q));
+  document.getElementById('btnBack').addEventListener('click',goBack);
+}
+
+function hideErr(){ const e=document.getElementById('errMsg'); if(e) e.classList.remove('visible'); }
+
+function validate(q){
+  if(!q.required) return true;
+  const v=answers[q.id];
+  if(q.type==='checkbox') return true;
+  if(q.type==='scale')    return v!==undefined && v!==null;
+  return v && String(v).trim()!=='';
+}
+
+function goNext(q){
+  const a=document.getElementById('ans'); if(a) answers[q.id]=a.value.trim();
+  if(!validate(q)){ document.getElementById('errMsg').classList.add('visible'); return; }
+  if(q.id==='sintomas'){
+    const s=answers['sintomas']||[];
+    if(s.includes('Pensamentos suicidas')||s.includes('Pensamentos de automutilação')){ showSafety(); return; }
+  }
+  const vis=visFlat();
+  if(flatIdx>=vis.length-1){ submitForm(); return; }
+  flatIdx++; renderQuestion('forward');
+}
+
+function goBack(){ if(flatIdx<=0) return; flatIdx--; renderQuestion('backward'); }
+
+function showSafety(){
+  card.innerHTML=`
+    <div style="text-align:center;padding:10px 0 20px">
+      <div style="font-size:2rem;margin-bottom:12px">💙</div>
+      <div class="question-label" style="color:var(--teal)">Você não está sozinho(a)</div>
+    </div>
+    <p style="font-size:.92rem;line-height:1.7;color:var(--mid);margin-bottom:18px">
+      Notamos que você marcou pensamentos difíceis. A psicóloga irá conversar com você sobre isso com todo o cuidado que merece.</p>
+    <p style="font-size:.88rem;color:var(--mid);margin-bottom:24px">
+      Se precisar de apoio imediato: <strong style="color:var(--teal)">CVV — 188</strong> (24h, gratuito)</p>
+    <div class="nav-row">
+      <button class="btn btn-secondary" id="bk2">← Voltar</button>
+      <button class="btn btn-primary"   id="ct">Continuar →</button>
+    </div>`;
+  document.getElementById('bk2').addEventListener('click',()=>renderQuestion('backward'));
+  document.getElementById('ct').addEventListener('click',()=>{
+    const vis=visFlat(); if(flatIdx>=vis.length-1){ submitForm(); return; }
+    flatIdx++; renderQuestion('forward');
+  });
+}
+
+// ── ENVIO PARA GOOGLE SHEETS ──────────────────────────────────
+async function submitForm(){
+  card.innerHTML=`<div class="done-screen"><div class="big-icon">⏳</div><h2>Enviando…</h2><p>Aguarde um momento.</p></div>`;
+  document.getElementById('progressWrap').style.display='none';
+
+  // Montar objeto plano para a planilha
+  const row = {
+    data_envio:         new Date().toLocaleString('pt-BR'),
+    status:             'novo',
+    nome:               answers.nome            || '',
+    idade:              answers.idade           || '',
+    sexo:               answers.sexo            || '',
+    estado_civil:       answers.estado_civil    || '',
+    escolaridade:       answers.escolaridade    || '',
+    ocupacao:           answers.ocupacao        || '',
+    reside_com:         answers.reside_com      || '',
+    telefone:           answers.telefone        || '',
+    email:              answers.email           || '',
+    pai_nome:           answers.pai_nome        || '',
+    pai_idade:          answers.pai_idade       || '',
+    pai_ocup:           answers.pai_ocup        || '',
+    mae_nome:           answers.mae_nome        || '',
+    mae_idade:          answers.mae_idade       || '',
+    mae_ocup:           answers.mae_ocup        || '',
+    conjuge:            answers.conjuge         || '',
+    conjuge_ocup:       answers.conjuge_ocup    || '',
+    filhos:             answers.filhos          || '',
+    queixa:             answers.queixa          || '',
+    inicio_sintomas:    answers.inicio          || '',
+    estressores:        answers.estressores     || '',
+    estressores_desc:   answers.estressores_desc|| '',
+    sintomas:           Array.isArray(answers.sintomas) ? answers.sintomas.join(' | ') : '',
+    intensidade:        answers.intensidade     || '',
+    infancia:           answers.infancia        || '',
+    rel_familiar:       answers.rel_familiar    || '',
+    obs_historia:       answers.obs_historia    || '',
+    trat_anterior:      answers.trat_anterior   || '',
+    trat_desc:          answers.trat_desc       || '',
+    doenca:             answers.doenca          || '',
+    doenca_desc:        answers.doenca_desc     || '',
+    medicamento:        answers.medicamento     || '',
+    medicamento_desc:   answers.medicamento_desc|| '',
+    hist_mental:        answers.hist_mental     || '',
+    hist_alcool:        answers.hist_alcool     || '',
+    hist_suicidio:      answers.hist_suicidio   || '',
+    obs_medico:         answers.obs_medico      || '',
+    risco:              (answers.sintomas||[]).some(s=>s.includes('suicidas')||s.includes('automutilação')) ? 'SIM ⚠️' : 'não',
+    observacoes_clinicas: '',
+    sessoes:            '',
+    financeiro:         '',
+  };
+
+  try {
+    // Google Apps Script não aceita CORS com POST normal — usamos no-cors via form trick
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(row));
+
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      body:   formData,
+      mode:   'no-cors',  // necessário para GitHub Pages → Google Apps Script
+    });
+
+    card.innerHTML=`
+      <div class="done-screen">
+        <div class="big-icon">✅</div>
+        <h2>Ficha enviada!</h2>
+        <p>Obrigado, <strong>${answers.nome||''}</strong>.<br>
+        Suas informações foram registradas com segurança.<br><br>
+        A Dra. Vanessa irá analisar sua ficha em breve e entrará em contato.</p>
+      </div>`;
+  } catch(err){
+    console.error(err);
+    card.innerHTML=`
+      <div class="done-screen">
+        <div class="big-icon">❌</div>
+        <h2>Erro ao enviar</h2>
+        <p>Verifique sua conexão e tente novamente.<br>
+        Se o problema persistir, entre em contato pelo telefone.</p>
+        <button class="btn btn-primary" style="margin-top:24px" onclick="location.reload()">Tentar novamente</button>
+      </div>`;
+  }
+}
+
+// ── INICIAR ───────────────────────────────────────────────────
+renderQuestion('forward');
+</script>
+</body>
+</html>
